@@ -1,3 +1,4 @@
+import TopMenuContainer from '@/components/TopMenuContainer'
 import { Box, Text } from '@chakra-ui/react'
 import Head from 'next/head'
 
@@ -11,8 +12,8 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Box color="textPrimary">
-          <Text fontSize="4xl">Hello World</Text>
+        <Box color="textPrimary" background="backgroundPrimary" height="100vh" padding="40px">
+          <TopMenuContainer />
         </Box>
       </main>
     </>

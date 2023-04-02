@@ -9,6 +9,8 @@ export default function App({ Component, pageProps }: AppProps) {
     },
     colors: {
       primaryBlue: "#5053D9",
+      primaryBlueHovered: "#8082E4",
+
       backgroundPrimary: "#ECEFF6",
       backgroundSecondary: "#F0F0F0",
       textPrimary: "#333333",
