@@ -1,4 +1,4 @@
-import { Box, Button, Flex, Icon, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { Button, Flex, Icon, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
 import React from 'react'
 import { IoMdCloudUpload, IoMdSearch } from "react-icons/io"
 
@@ -6,7 +6,7 @@ const TopMenuContainer: React.FC = () => {
   return (
     <Flex
       background="white"
-      padding="20px"
+      padding="10px 20px"
       justifyContent="space-between"
       alignItems="center"
       borderRadius="10px"

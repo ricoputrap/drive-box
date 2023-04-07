@@ -1,5 +1,6 @@
+import Files from '@/components/Files'
 import TopMenuContainer from '@/components/TopMenuContainer'
-import { Box, Text } from '@chakra-ui/react'
+import { Box, Stack } from '@chakra-ui/react'
 import Head from 'next/head'
 
 export default function Home() {
@@ -13,7 +14,10 @@ export default function Home() {
       </Head>
       <main>
         <Box color="textPrimary" background="backgroundPrimary" height="100vh" padding="40px">
-          <TopMenuContainer />
+          <Stack rowGap="20px">
+            <TopMenuContainer />
+            <Files />
+          </Stack>
         </Box>
       </main>
     </>
