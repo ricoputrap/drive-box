@@ -1,8 +1,11 @@
-import { Button, Flex, Icon, Input, InputGroup, InputLeftElement } from '@chakra-ui/react'
+import { Button, Flex, Icon, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react'
 import React from 'react'
 import { IoMdCloudUpload, IoMdSearch } from "react-icons/io"
+import ModalUpload from '../ModalUpload';
 
 const TopMenuContainer: React.FC = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
   return (
     <Flex
       background="white"
@@ -26,6 +29,7 @@ const TopMenuContainer: React.FC = () => {
       </InputGroup>
 
       <Button
+        onClick={onOpen}
         background="primaryBlue"
         color="white"
         leftIcon={<Icon w="20px" h="20px" as={IoMdCloudUpload} />}
@@ -35,6 +39,11 @@ const TopMenuContainer: React.FC = () => {
       >
         UPLOAD
       </Button>
+
+      <ModalUpload
+        isOpen={isOpen}
+        onClose={onClose}
+      />
     </Flex>
   )
 }
