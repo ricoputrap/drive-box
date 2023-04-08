@@ -1,4 +1,4 @@
-import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text } from '@chakra-ui/react';
+import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react'
 import { createFilter, MultiValue, ActionMeta } from 'react-select';
 import CreateableSelect from "react-select/creatable";
@@ -23,6 +23,7 @@ const options: Tag[] = [
 ];
 
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
+  const [showError, setShowError] = useState<boolean>(false);
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [tags, setTags] = useState<MultiValue<Tag>>([]);
@@ -55,6 +56,12 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(label, file, tags);
+
+    if (label == "" || file == null) {
+      setShowError(true);
+      return;
+    }
+
     onClose();
     reset();
   }
@@ -102,17 +109,26 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
               <FormControl>
 
                 {/* Label */}
-                <FormLabel>Label</FormLabel>
+                <FormLabel>Label*</FormLabel>
                 <Input
                   type="text"
                   value={ label }
                   onChange={ handleLabelChange }
                 />
+                { showError && label == "" &&
+                  <FormHelperText
+                    color="red.500"
+                    fontSize="12px"
+                    marginTop="4px"
+                  >
+                    Label is required
+                  </FormHelperText>
+                }
               </FormControl>
 
               {/* File */}
               <FormControl>
-                <FormLabel>File</FormLabel>
+                <FormLabel>File*</FormLabel>
                 <Box
                   {...getRootProps()}
                   height="80px"
@@ -152,7 +168,15 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                     )}
                   </Flex>
                 </Box>
-
+                { showError && file == null &&
+                  <FormHelperText
+                    color="red.500"
+                    fontSize="12px"
+                    marginTop="4px"
+                  >
+                    File is required
+                  </FormHelperText>
+                }
               </FormControl>
 
               {/* Tags */}
