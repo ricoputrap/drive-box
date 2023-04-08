@@ -41,10 +41,20 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   }
 
   const handleTagsChange = (newValue: MultiValue<Tag>, actionMeta: ActionMeta<Tag>) => {
-    if (actionMeta.action == "clear")
-      setTags([]);
-    else
-      setTags([...tags, ...newValue]);
+    switch (actionMeta.action) {
+      case "clear":
+        setTags([]);
+        break;
+
+      case "remove-value":
+        const { removedValue } = actionMeta;
+        const updatedTags: MultiValue<Tag> = tags.filter(tag => tag.value !== removedValue.value);
+        setTags(updatedTags);
+        break;
+        
+      default:
+        setTags([...tags, ...newValue]);
+    }
   }
 
   const reset = () => {
