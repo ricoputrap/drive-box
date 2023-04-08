@@ -5,6 +5,7 @@ import CreateableSelect from "react-select/creatable";
 import makeAnimated from 'react-select/animated';
 import { useDropzone } from 'react-dropzone';
 import { IoMdCloudUpload } from 'react-icons/io';
+import supabase, { supabaseUrl } from '@/clients/supabase';
 
 interface Props {
   isOpen: boolean;
@@ -64,13 +65,33 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     setShowError(false);
   }
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(label, file, tags);
 
     if (label == "" || file == null) {
       setShowError(true);
       return;
+    }
+
+    const { data, error } = await supabase.storage
+      .from('drive-box')
+      .upload(`${label}`, file)
+
+    if (data) {
+      const imgUrl = supabaseUrl + '/storage/v1/object/public/drive-box/' + data.path;
+      const newFile = {
+        label,
+        url: imgUrl,
+        extension: "png",
+        user_id: "851f138b-901e-4e6a-9186-e2a486e55cdf"
+      }
+
+      const {
+        data: insertFileData,
+        error: insertFileError
+      } = await supabase
+        .from("FILE")
+        .insert([newFile]);
     }
 
     onClose();
