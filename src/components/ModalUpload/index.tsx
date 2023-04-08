@@ -51,6 +51,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     setLabel('');
     setFile(null);
     setTags([]);
+    setShowError(false);
   }
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -94,6 +95,11 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     }
     else return "";
   }, [file]);
+
+  const handleFormCancel = () => {
+    onClose();
+    reset();
+  }
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -202,7 +208,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
               paddingX="66px"
             >
               <Button
-                onClick={ onClose }
+                onClick={ handleFormCancel }
                 textTransform="uppercase"
                 background="transparent"
                 color="primaryBlue"
