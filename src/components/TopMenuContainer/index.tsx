@@ -1,11 +1,14 @@
 import { Button, Flex, Icon, Input, InputGroup, InputLeftElement, useDisclosure } from '@chakra-ui/react'
-import React from 'react'
+import React, { useRef } from 'react'
 import { IoMdCloudUpload, IoMdSearch } from "react-icons/io"
 import ModalUpload from '../ModalUpload';
+import useBaseStore from '../state/store';
 
 const TopMenuContainer: React.FC = () => {
+  const searchValue = useBaseStore(state => state.searchValue);
+  const setSearchValue = useBaseStore(state => state.setSearchValue);
   const { isOpen, onOpen, onClose } = useDisclosure();
-
+  
   return (
     <Flex
       background="white"
@@ -25,6 +28,8 @@ const TopMenuContainer: React.FC = () => {
           w="230px"
           background="backgroundSecondary"
           border="none"
+          value={ searchValue }
+          onChange={(e) => setSearchValue(e.target.value)}
         />
       </InputGroup>
 
