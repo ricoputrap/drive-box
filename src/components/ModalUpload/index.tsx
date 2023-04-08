@@ -6,6 +6,8 @@ import makeAnimated from 'react-select/animated';
 import { useDropzone } from 'react-dropzone';
 import { IoMdCloudUpload } from 'react-icons/io';
 import supabase, { supabaseUrl } from '@/clients/supabase';
+import { TFile } from '@/types/file.types';
+import useBaseStore from '../state/store';
 
 interface Props {
   isOpen: boolean;
@@ -24,6 +26,8 @@ const options: Tag[] = [
 ];
 
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
+  const addFile = useBaseStore(state => state.addFile);
+
   const [showError, setShowError] = useState<boolean>(false);
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
@@ -82,7 +86,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
 
     if (data) {
       const imgUrl = supabaseUrl + '/storage/v1/object/public/drive-box/' + data.path;
-      const newFile = {
+      const newFile: TFile = {
         label,
         url: imgUrl,
         extension: "png",
@@ -98,7 +102,16 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
         error: insertFileError
       } = await supabase
         .from("FILE")
-        .insert([newFile]);
+        .insert([newFile])
+        .select();
+
+      if (insertFileError) {
+        console.error("===== insertFileError:", insertFileError);
+      }
+      else {
+        newFile.id = insertFileData[0].id;
+        addFile(newFile)
+      }
     }
 
     onClose();
