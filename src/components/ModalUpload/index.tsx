@@ -83,7 +83,11 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
         label,
         url: imgUrl,
         extension: "png",
-        user_id: "851f138b-901e-4e6a-9186-e2a486e55cdf"
+        user_id: "851f138b-901e-4e6a-9186-e2a486e55cdf",
+        tags: tags.reduce((acc, tag) => {
+          if (acc == "") return tag.value;
+          return acc + ";" + tag.value;
+        }, "")
       }
 
       const {
