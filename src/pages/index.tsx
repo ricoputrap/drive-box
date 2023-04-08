@@ -1,4 +1,5 @@
 import supabase from '@/clients/supabase'
+import BoxLogo from '@/components/BoxLogo'
 import Files from '@/components/Files'
 import Loading from '@/components/Loading'
 import useBaseStore from '@/components/state/store'
@@ -33,14 +34,7 @@ const Home: NextPage<Props> = ({ files }) => {
         <Box color="textPrimary" background="backgroundPrimary" padding="40px">
           <Flex columnGap="20px">
             <Stack rowGap="20px">
-              <Flex columnGap="12px" background="white" padding="10px 20px" borderRadius="10px">
-                <Box width="40px" height="40px">
-                  <Image src="/logo.svg" alt="DriveBox" width="40" height="40" />
-                </Box>
-                <Text fontSize="28px" fontWeight={900} height="40px">
-                  DriveBox
-                </Text>
-              </Flex>
+              <BoxLogo />
             </Stack>
           
             <Stack rowGap="20px">
