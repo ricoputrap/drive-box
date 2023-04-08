@@ -1,15 +1,28 @@
 import { Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react'
+import { Options, createFilter } from 'react-select';
+import CreateableSelect from "react-select/creatable"
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
+interface Tag {
+  value: string;
+  label: string;
+}
+
+const options: Tag[] = [
+  { value: 'tag1', label: 'Tag 1' },
+  { value: 'tag2', label: 'Tag 2' },
+  { value: 'tag3', label: 'Tag 3' },
+];
+
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
-  // const [tags, setTags] = useState<OptionsType<Tag>>([]);
+  const [tags, setTags] = useState<Options<Tag>>([]);
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -23,11 +36,31 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     }
   }
 
+  const handleTagsChange = (selectedOptions: Options<Tag>) => {
+    setTags(selectedOptions);
+  }
+
+  const reset = () => {
+    setLabel('');
+    setFile(null);
+    setTags([]);
+  }
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("label:", label);
-    console.log("file:", file);
+    console.log(label, file, tags);
     onClose();
+    reset();
+  }
+
+  const handleCreateOption = (inputValue: string) => {
+    // if an option with label same as "inputValue" in `tags` does not exist,
+    // create and select it
+    if (tags.find((tag) => tag.label === inputValue))
+      return;
+
+    const newOption: Tag = { value: inputValue, label: inputValue };
+    setTags([...tags, newOption]);
   }
 
   return (
@@ -52,7 +85,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                 />
               </FormControl>
 
-              {/* input file for "file" */}
+              {/* File */}
               <FormControl>
                 <FormLabel>File</FormLabel>
                 <Input
@@ -60,8 +93,22 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                   onChange={ handleFileChange }
                 />
               </FormControl>
+
+              {/* Tags */}
+              <FormControl>
+                <FormLabel>Tags</FormLabel>
+                <CreateableSelect
+                  isMulti
+                  value={tags}
+                  options={options}
+                  filterOption={createFilter({ ignoreAccents: false })}
+                  onChange={ handleTagsChange }
+                  onCreateOption={ handleCreateOption }
+                />
+              </FormControl>
             </VStack>
 
+            {/* Buttons */}
             <Flex
               width="100%"
               justifyContent="center"
