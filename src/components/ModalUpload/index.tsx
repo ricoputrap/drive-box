@@ -1,7 +1,8 @@
-import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react';
-import React, { useState } from 'react'
+import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text } from '@chakra-ui/react';
+import React, { useMemo, useState } from 'react'
 import { Options, createFilter } from 'react-select';
-import CreateableSelect from "react-select/creatable"
+import CreateableSelect from "react-select/creatable";
+import makeAnimated from 'react-select/animated';
 import { useDropzone } from 'react-dropzone';
 import { IoMdCloudUpload } from 'react-icons/io';
 
@@ -25,6 +26,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [tags, setTags] = useState<Options<Tag>>([]);
+  const animatedComponents = makeAnimated();
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -71,6 +73,25 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     setTags([...tags, newOption]);
   }
 
+  const convertFileSizeToReadable = (size: number) => {
+    if (size < 1024) {
+      return `${size} bytes`;
+    } else if (size < 1024 * 1024) {
+      return `${(size / 1024).toFixed(2)} KB`;
+    } else if (size < 1024 * 1024 * 1024) {
+      return `${(size / 1024 / 1024).toFixed(2)} MB`;
+    } else {
+      return `${(size / 1024 / 1024 / 1024).toFixed(2)} GB`;
+    }
+  }
+
+  const fileSize = useMemo<string>(() => {
+    if (file) {
+      return convertFileSizeToReadable(file.size);
+    }
+    else return "";
+  }, [file]);
+
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
@@ -111,13 +132,15 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                     flexDirection="column"
                   >
                     {!!file ? (
-                      <Box
+                      <Stack
                         as="span"
                         fontSize="14px"
                         color="textSecondary"
+                        textAlign="center"
                       >
-                        {file.name}
-                      </Box>
+                        <Text>{file.name}</Text>
+                        <Text>{fileSize}</Text>
+                      </Stack>
                     ) : (
                       <>
                         <Icon w="20px" h="20px" as={IoMdCloudUpload} />
@@ -143,6 +166,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                   isMulti
                   value={tags}
                   options={options}
+                  components={ animatedComponents }
                   filterOption={createFilter({ ignoreAccents: false })}
                   onChange={ handleTagsChange }
                   onCreateOption={ handleCreateOption }
