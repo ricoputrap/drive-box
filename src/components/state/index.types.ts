@@ -3,6 +3,7 @@ import { TFile } from "@/types/file.types";
 export interface BaseState {
   searchValue: string;
   files: TFile[];
+  loading: boolean;
 }
 
 export interface BaseAction {
@@ -10,4 +11,5 @@ export interface BaseAction {
   setFiles: (files: TFile[]) => void;
   getFiles: () => TFile[];
   addFile: (file: TFile) => void;
+  setLoading: (loading: boolean) => void;
 }

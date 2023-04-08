@@ -27,6 +27,7 @@ const options: Tag[] = [
 
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const addFile = useBaseStore(state => state.addFile);
+  const setLoading = useBaseStore(state => state.setLoading);
 
   const [showError, setShowError] = useState<boolean>(false);
   const [label, setLabel] = useState<string>('');
@@ -74,15 +75,25 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
 
     if (label == "" || file == null) {
       setShowError(true);
+      setLoading(false);
       return;
     }
 
     const { data, error } = await supabase.storage
       .from('drive-box')
       .upload(`${label}`, file)
+
+    if (error) {
+      console.error("===== upload error:", error);
+      setLoading(false);
+      onClose();
+      reset();
+      return;
+    }
 
     if (data) {
       const imgUrl = supabaseUrl + '/storage/v1/object/public/drive-box/' + data.path;
@@ -114,6 +125,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
       }
     }
 
+    setLoading(false);
     onClose();
     reset();
   }

@@ -1,5 +1,6 @@
 import supabase from '@/clients/supabase'
 import Files from '@/components/Files'
+import Loading from '@/components/Loading'
 import useBaseStore from '@/components/state/store'
 import TopMenuContainer from '@/components/TopMenuContainer'
 import { TFile } from '@/types/file.types'
@@ -26,6 +27,7 @@ const Home: NextPage<Props> = ({ files }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
+        <Loading />
         <Box color="textPrimary" background="backgroundPrimary" padding="40px">
           <Stack rowGap="20px">
             <TopMenuContainer />
