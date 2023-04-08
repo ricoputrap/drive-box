@@ -1,6 +1,6 @@
 import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react'
-import { Options, createFilter } from 'react-select';
+import { createFilter, MultiValue, ActionMeta } from 'react-select';
 import CreateableSelect from "react-select/creatable";
 import makeAnimated from 'react-select/animated';
 import { useDropzone } from 'react-dropzone';
@@ -25,7 +25,7 @@ const options: Tag[] = [
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
-  const [tags, setTags] = useState<Options<Tag>>([]);
+  const [tags, setTags] = useState<MultiValue<Tag>>([]);
   const animatedComponents = makeAnimated();
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -39,15 +39,8 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     setLabel(value);
   }
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { files } = e.target;
-    if (files && files.length) {
-      setFile(files[0]);
-    }
-  }
-
-  const handleTagsChange = (selectedOptions: Options<Tag>) => {
-    setTags(selectedOptions);
+  const handleTagsChange = (newValue: MultiValue<Tag>, actionMeta: ActionMeta<Tag>) => {
+    setTags([...tags, ...newValue]);
   }
 
   const reset = () => {
