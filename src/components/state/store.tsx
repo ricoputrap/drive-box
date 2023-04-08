@@ -14,7 +14,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   getFiles: () => {
     const files: TFile[] = get().files;
 
-    return files.filter(file => {
+    const filteredFiles: TFile[] = files.filter(file => {
       const searchValue = get().searchValue;
       const label = file.label.toLowerCase();
       const extension = file.extension.toLowerCase();
@@ -23,6 +23,9 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
       if (label.includes(value) || extension.includes(value)) return true;
       return false;
     });
+
+    filteredFiles.reverse();
+    return filteredFiles;
   },
   addFile: (file: TFile) => set(state => ({ files: [...state.files, file] })),
   setLoading: (value: boolean) => set({ loading: value }),
