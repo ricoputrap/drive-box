@@ -1,9 +1,16 @@
+import supabase from '@/clients/supabase'
 import Files from '@/components/Files'
 import TopMenuContainer from '@/components/TopMenuContainer'
+import { TFile } from '@/types/file.types'
 import { Box, Stack } from '@chakra-ui/react'
+import { NextPage } from 'next'
 import Head from 'next/head'
 
-export default function Home() {
+interface Props {
+  files: TFile[];
+}
+const Home: NextPage<Props> = ({ files }) => {
+
   return (
     <>
       <Head>
@@ -16,10 +23,30 @@ export default function Home() {
         <Box color="textPrimary" background="backgroundPrimary" height="100vh" padding="40px">
           <Stack rowGap="20px">
             <TopMenuContainer />
-            <Files />
+            <Files files={ files } />
           </Stack>
         </Box>
       </main>
     </>
   )
 }
+
+export const getServerSideProps = async () => {
+  const userId = "851f138b-901e-4e6a-9186-e2a486e55cdf";
+  const { data, error } = await supabase.from("FILE").select("*").eq("user_id", userId);
+
+  if (error) {
+    console.error("===== getAllFIles error =====", error);
+  }
+  // else {
+  //   console.log("===== getAllFIles data =====", data);
+  // }
+
+  return {
+    props: {
+      files: data
+    }
+  }
+}
+
+export default Home;

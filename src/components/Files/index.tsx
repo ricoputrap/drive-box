@@ -1,34 +1,30 @@
-import { Box, Stack } from '@chakra-ui/react'
+import { Box, Flex, Stack } from '@chakra-ui/react'
 import React, { useEffect } from 'react'
 import Img1 from "../../assets/img-1.jpg"
 import FileItem from '../FileItem'
 import supabase from "../../clients/supabase";
+import { TFile } from '@/types/file.types';
 
-const Files: React.FC = () => {
-  useEffect(() => {
-    const getAllFiles = async () => {
-      const userId = "851f138b-901e-4e6a-9186-e2a486e55cdf";
-      const { data, error } = await supabase.from("FILE").select("*").eq("user_id", userId);
+interface Props {
+  files: TFile[];
+}
 
-      if (error) {
-        console.error("===== getAllFIles error =====", error);
-      }
-      else {
-        console.log("===== getAllFIles data =====", data);
-      }
-    }
-    getAllFiles();
-  }, [])
-
+const Files: React.FC<Props> = ({ files }) => {
   return (
     <Box padding="20px" background="white" borderRadius="10px">
       <Stack>
 
         {/* FILES CONTENT */}
-        <FileItem
-          img={Img1}
-          label="Hiking in Arizona"
-        />
+        <Flex gap="40px">
+          {files.map((file) => (
+            <FileItem
+              key={file.id}
+              img={file.url}
+              label={file.label}
+              extension={file.extension}
+            />
+          ))}
+        </Flex>
 
         {/* PAGINATION */}
       </Stack>
