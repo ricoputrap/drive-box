@@ -34,6 +34,9 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     onDrop: (acceptedFiles) => {
       setFile(acceptedFiles[0]);
     },
+    accept: {
+      'image/*': ['.jpeg', '.png']
+    }
   });
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {

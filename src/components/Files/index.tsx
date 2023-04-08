@@ -15,7 +15,7 @@ const Files: React.FC<Props> = ({ files }) => {
       <Stack>
 
         {/* FILES CONTENT */}
-        <Flex gap="40px">
+        <Flex gap="40px" wrap="wrap">
           {files.map((file) => (
             <FileItem
               key={file.id}

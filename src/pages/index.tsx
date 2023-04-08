@@ -20,7 +20,7 @@ const Home: NextPage<Props> = ({ files }) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <Box color="textPrimary" background="backgroundPrimary" height="100vh" padding="40px">
+        <Box color="textPrimary" background="backgroundPrimary" padding="40px">
           <Stack rowGap="20px">
             <TopMenuContainer />
             <Files files={ files } />
@@ -38,9 +38,6 @@ export const getServerSideProps = async () => {
   if (error) {
     console.error("===== getAllFIles error =====", error);
   }
-  // else {
-  //   console.log("===== getAllFIles data =====", data);
-  // }
 
   return {
     props: {
