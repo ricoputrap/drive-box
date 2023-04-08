@@ -51,7 +51,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
         const updatedTags: MultiValue<Tag> = tags.filter(tag => tag.value !== removedValue.value);
         setTags(updatedTags);
         break;
-        
+
       default:
         setTags([...tags, ...newValue]);
     }
@@ -158,6 +158,9 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                     justifyContent="center"
                     alignItems="center"
                     flexDirection="column"
+                    _hover={{
+                      cursor: "pointer",
+                    }}
                   >
                     {!!file ? (
                       <Stack
