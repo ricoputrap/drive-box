@@ -1,7 +1,9 @@
-import { Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react';
+import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react'
 import { Options, createFilter } from 'react-select';
 import CreateableSelect from "react-select/creatable"
+import { useDropzone } from 'react-dropzone';
+import { IoMdCloudUpload } from 'react-icons/io';
 
 interface Props {
   isOpen: boolean;
@@ -23,6 +25,12 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [tags, setTags] = useState<Options<Tag>>([]);
+
+  const { getRootProps, getInputProps } = useDropzone({
+    onDrop: (acceptedFiles) => {
+      setFile(acceptedFiles[0]);
+    },
+  });
 
   const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -54,11 +62,11 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   }
 
   const handleCreateOption = (inputValue: string) => {
-    // if an option with label same as "inputValue" in `tags` does not exist,
-    // create and select it
+    // Check if the option already exists
     if (tags.find((tag) => tag.label === inputValue))
       return;
 
+    // Create a new option and add it to the list of options
     const newOption: Tag = { value: inputValue, label: inputValue };
     setTags([...tags, newOption]);
   }
@@ -88,10 +96,44 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
               {/* File */}
               <FormControl>
                 <FormLabel>File</FormLabel>
-                <Input
-                  type="file"
-                  onChange={ handleFileChange }
-                />
+                <Box
+                  {...getRootProps()}
+                  height="80px"
+                  background="backgroundSecondary"
+                  border="1px dashed #BDBDBD"
+                  borderRadius="10px"
+                >
+                  <input {...getInputProps()} />
+                  <Flex
+                    height="100%"
+                    justifyContent="center"
+                    alignItems="center"
+                    flexDirection="column"
+                  >
+                    {!!file ? (
+                      <Box
+                        as="span"
+                        fontSize="14px"
+                        color="textSecondary"
+                      >
+                        {file.name}
+                      </Box>
+                    ) : (
+                      <>
+                        <Icon w="20px" h="20px" as={IoMdCloudUpload} />
+                        <Box
+                          as="span"
+                          fontSize="14px"
+                          color="textSecondary"
+                          marginTop="10px"
+                        >
+                          Drag and drop or click to upload
+                        </Box>
+                      </>
+                    )}
+                  </Flex>
+                </Box>
+
               </FormControl>
 
               {/* Tags */}
