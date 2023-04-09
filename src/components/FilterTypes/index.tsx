@@ -15,6 +15,7 @@ const FilterTypes: React.FC = () => {
       values={ types }
       handleChange={ handleTypesChange }
       options={ OPTIONS }
+      isUppercase
     />
   )
 }

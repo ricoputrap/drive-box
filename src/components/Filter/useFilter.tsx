@@ -17,7 +17,7 @@ const useFilter = (
       case "Enter":
       case "Tab":
         event.preventDefault();
-        const newOption: TOption = { value: inputValue, label: inputValue.toUpperCase() };
+        const newOption: TOption = { value: inputValue, label: inputValue };
         handleChange([...values, newOption], { action: "create-option" } as ActionMeta<TOption>);
         setInputValue("");
     }
