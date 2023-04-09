@@ -22,9 +22,9 @@ const Files: React.FC = () => {
       borderRadius="10px"
       minHeight="700px"
     >
-      <Stack>
+      <Stack alignItems="center">
         {/* FILES CONTENT */}
-        <Flex gap="40px" wrap="wrap">
+        <Flex gap="20px" wrap="wrap">
           {filteredFiles.map((file) => (
             <FileItem
               key={file.id}
