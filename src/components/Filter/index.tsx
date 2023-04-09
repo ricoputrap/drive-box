@@ -2,16 +2,20 @@ import { TOption } from '@/types/file.types'
 import { Box, Text } from '@chakra-ui/react';
 import React from 'react'
 import Select, { ActionMeta, MultiValue } from 'react-select'
+import CreatableSelect from "react-select/creatable";
 import customStyles from './customStyles';
+import useFilter from './useFilter';
 
 interface Props {
   label: string;
   values: MultiValue<TOption>;
   handleChange: (newValue: MultiValue<TOption>, actionMeta: ActionMeta<TOption>) => void;
   options: TOption[];
+  isCreatable?: boolean;
 }
 
-const Filter: React.FC<Props> = ({ label, values, handleChange, options }) => {
+const Filter: React.FC<Props> = ({ label, values, handleChange, options, isCreatable = false }) => {
+  const { inputValue, handleInputChange, handleKeyDown } = useFilter(values, handleChange);
   return (
     <Box padding="20px" background="white" borderRadius="10px">
       <Text
@@ -23,19 +27,39 @@ const Filter: React.FC<Props> = ({ label, values, handleChange, options }) => {
         { label }
       </Text>
 
-      <Select
-        isMulti
-        placeholder=""
-        value={ values }
-        options={ options }
-        onChange={ handleChange }
-        components={{
-          DropdownIndicator:() => null,
-          IndicatorSeparator: () => null
-        }}
-        styles={ customStyles }
-        isClearable={ false }
-      />
+      { isCreatable ? (
+        <CreatableSelect
+          isMulti
+          placeholder=""
+          value={ values }
+          options={ options }
+          onChange={ handleChange }
+          components={{
+            DropdownIndicator:() => null,
+            IndicatorSeparator: () => null
+          }}
+          styles={ customStyles }
+          isClearable={ false }
+          menuIsOpen={ false }
+          inputValue={ inputValue }
+          onInputChange={ handleInputChange }
+          onKeyDown={ handleKeyDown }
+        />
+      ) : (
+        <Select
+          isMulti
+          placeholder=""
+          value={ values }
+          options={ options }
+          onChange={ handleChange }
+          components={{
+            DropdownIndicator:() => null,
+            IndicatorSeparator: () => null
+          }}
+          styles={ customStyles }
+          isClearable={ false }
+        />
+      )}
     </Box>
   )
 }

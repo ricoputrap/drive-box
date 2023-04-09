@@ -1,5 +1,4 @@
 import { TOption } from '@/types/file.types';
-import React from 'react'
 import { ActionMeta, MultiValue } from 'react-select';
 import useBaseStore from '../state/store'
 
@@ -20,7 +19,6 @@ const useFilter = () => {
         setTags([...tags, lastNewValue]);
     }
   }
-      
 
   return { tags, handleTagsChange }
 }

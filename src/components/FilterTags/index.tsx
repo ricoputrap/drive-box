@@ -11,6 +11,7 @@ const FilterTags: React.FC = () => {
       values={ tags }
       handleChange={ handleTagsChange }
       options={[]}
+      isCreatable
     />
   )
 }
