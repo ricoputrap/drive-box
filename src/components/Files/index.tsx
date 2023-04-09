@@ -14,9 +14,13 @@ const Files: React.FC = () => {
   );
 
   return (
-    <Box padding="20px" background="white" borderRadius="10px">
+    <Box
+      padding="20px"
+      background="white"
+      borderRadius="10px"
+      minHeight="700px"
+    >
       <Stack>
-
         {/* FILES CONTENT */}
         <Flex gap="40px" wrap="wrap">
           {filteredFiles.map((file) => (

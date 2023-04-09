@@ -10,6 +10,12 @@ const customStyles: StylesConfig<TOption, true, never> | undefined = {
     ...provided,
     textTransform: "uppercase",
   }),
+  control: (provided, state) => ({
+    ...provided,
+    minHeight: "68px",
+    alignItems: "start",
+    padding: "4px 0"
+  })
 }
 
 export default customStyles;

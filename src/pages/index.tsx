@@ -33,12 +33,12 @@ const Home: NextPage<Props> = ({ files }) => {
         <Loading />
         <Box color="textPrimary" background="backgroundPrimary" padding="40px">
           <Flex columnGap="20px">
-            <Stack rowGap="20px">
+            <Stack rowGap="20px" width="25%">
               <BoxLogo />
               <FilterTypes />
             </Stack>
           
-            <Stack rowGap="20px">
+            <Stack rowGap="20px" width="-webkit-fill-available">
               <TopMenuContainer />
               <Files />
             </Stack>
