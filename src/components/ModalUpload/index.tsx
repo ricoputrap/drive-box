@@ -1,4 +1,4 @@
-import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText } from '@chakra-ui/react';
+import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText, useToast } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react'
 import { createFilter, MultiValue, ActionMeta } from 'react-select';
 import CreateableSelect from "react-select/creatable";
@@ -29,6 +29,8 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const [file, setFile] = useState<File | null>(null);
   const [tags, setTags] = useState<MultiValue<Tag>>([]);
   const animatedComponents = makeAnimated();
+
+  const toast = useToast();
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -119,6 +121,14 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
       }
       else {
         newFile.id = insertFileData[0].id;
+        toast({
+          title: 'Upload success.',
+          description: "The file has been successfully uploaded.",
+          status: 'success',
+          duration: 4000,
+          isClosable: true,
+        })
+
         addFile(newFile)
       }
     }
