@@ -7,6 +7,7 @@ export interface BaseState {
   loading: boolean;
   types: MultiValue<TOption>;
   tags: MultiValue<TOption>;
+  sizeRange: number[];
 }
 
 export interface BaseAction {
@@ -17,4 +18,5 @@ export interface BaseAction {
   setLoading: (loading: boolean) => void;
   setTypes: (types: MultiValue<TOption>) => void;
   setTags: (tags: MultiValue<TOption>) => void;
+  setSizeRange: (sizeRange: number[]) => void;
 }

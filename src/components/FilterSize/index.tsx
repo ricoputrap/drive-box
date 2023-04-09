@@ -1,25 +1,9 @@
 import { Box, Flex, RangeSlider, RangeSliderFilledTrack, RangeSliderThumb, RangeSliderTrack, Text } from '@chakra-ui/react'
-import React, { useMemo } from 'react'
-import { getBytesFromPercentage, getFormattedLabel, SIZE_5_MB } from './utils';
+import React from 'react'
+import useRange from './useRange';
 
 const FilterSize: React.FC = () => {
-  const [value, setValue] = React.useState<number[]>([10, 90]);
-
-  const [min, max]: number[] = useMemo(() => {
-    const min = getBytesFromPercentage(value[0], SIZE_5_MB);
-    const max = getBytesFromPercentage(value[1], SIZE_5_MB);
-    return [min, max];
-  }, [value]);
-
-  const minLabel: string = useMemo(() => {
-    const label = getFormattedLabel(min);
-    return label;
-  }, [min]);
-
-  const maxLabel: string = useMemo(() => {
-    const label = getFormattedLabel(max);
-    return label;
-  }, [max]);
+  const { range, handleChange, minLabel, maxLabel } = useRange();
 
   return (
     <Box padding="20px" background="white" borderRadius="10px">
@@ -41,7 +25,7 @@ const FilterSize: React.FC = () => {
         </Text>
       </Flex>
 
-      <RangeSlider defaultValue={[10, 90]} onChange={newValue => setValue(newValue)}>
+      <RangeSlider value={ range } onChange={ handleChange }>
         <RangeSliderTrack>
           <RangeSliderFilledTrack />
         </RangeSliderTrack>

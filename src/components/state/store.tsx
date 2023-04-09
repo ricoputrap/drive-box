@@ -1,5 +1,6 @@
 import { TFile } from "@/types/file.types";
 import { create } from "zustand";
+import { SIZE_10_MB } from "../FilterSize/utils";
 import { BaseState, BaseAction } from "./index.types";
 
 const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
@@ -9,6 +10,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   loading: false,
   types: [],
   tags: [],
+  sizeRange: [0, SIZE_10_MB],
 
   // actions
   setSearchValue: (value: string) => set({ searchValue: value }),
@@ -48,6 +50,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   setLoading: (value: boolean) => set({ loading: value }),
   setTypes: (types) => set({ types }),
   setTags: (tags) => set({ tags }),
+  setSizeRange: (sizeRange) => set({ sizeRange }),
 }));
 
 export default useBaseStore;
