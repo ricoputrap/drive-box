@@ -1,5 +1,6 @@
 import { TFile } from "@/types/file.types";
 import { create } from "zustand";
+import { mountStoreDevtool } from "simple-zustand-devtools";
 import { SIZE_10_MB } from "../FilterSize/utils";
 import { BaseState, BaseAction } from "./index.types";
 
@@ -25,22 +26,33 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
       const value = searchValue.toLowerCase();
       const fileTags = file.tags?.split(";") || [];
 
+      let valid = true;
+
       // filter by type
       const types = get().types;
       const typesValues = types.map(type => type.value);
-      if (typesValues.length > 0 && !typesValues.includes(extension)) return false;
+      if (typesValues.length > 0 && !typesValues.includes(extension))
+        valid = false;
 
       // filter by tags
       const tags = get().tags;
       const tagsValues = tags.map(tag => tag.value);
       if (tagsValues.length > 0) {
         const hasTag = fileTags.some(tag => tagsValues.includes(tag));
-        if (!hasTag) return false;
+        if (!hasTag)
+          valid = false;
       }
 
       // filter by search
-      if (label.includes(value) || extension.includes(value)) return true;
-      return false;
+      if (!label.includes(value) && !extension.includes(value))
+        valid = false;
+
+      // filter by size
+      const sizeRange = get().sizeRange;
+      if (file.size < sizeRange[0] || file.size > sizeRange[1])
+        valid = false;
+
+      return valid;
     });
 
     filteredFiles.reverse();
@@ -52,5 +64,9 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   setTags: (tags) => set({ tags }),
   setSizeRange: (sizeRange) => set({ sizeRange }),
 }));
+
+if (process.env.NODE_ENV === "development") {
+  mountStoreDevtool("BaseStore", useBaseStore);
+}
 
 export default useBaseStore;

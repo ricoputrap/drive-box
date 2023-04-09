@@ -9,10 +9,11 @@ const Files: React.FC = () => {
   const searchValue = useBaseStore(state => state.searchValue);
   const types = useBaseStore(state => state.types);
   const tags = useBaseStore(state => state.tags);
+  const sizeRange = useBaseStore(state => state.sizeRange);
 
   const filteredFiles = useMemo(
     () => getFiles(),
-    [getFiles, files, searchValue, types, tags]
+    [getFiles, files, searchValue, types, tags, sizeRange]
   );
 
   return (
@@ -22,7 +23,7 @@ const Files: React.FC = () => {
       borderRadius="10px"
       minHeight="700px"
     >
-      <Stack alignItems="center">
+      <Stack>
         {/* FILES CONTENT */}
         <Flex gap="20px" wrap="wrap">
           {filteredFiles.map((file) => (
