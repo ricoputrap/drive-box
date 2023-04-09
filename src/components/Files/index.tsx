@@ -21,7 +21,7 @@ const Files: React.FC = () => {
       padding="20px"
       background="white"
       borderRadius="10px"
-      minHeight="700px"
+      minHeight="650px"
     >
       <Stack>
         {/* FILES CONTENT */}

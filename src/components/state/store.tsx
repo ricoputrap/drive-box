@@ -8,7 +8,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   // state
   searchValue: "",
   files: [],
-  loading: false,
+  loading: true,
   types: [],
   tags: [],
   sizeRange: [0, SIZE_10_MB],
