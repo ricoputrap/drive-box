@@ -7,6 +7,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   searchValue: "",
   files: [],
   loading: false,
+  types: [],
 
   // actions
   setSearchValue: (value: string) => set({ searchValue: value }),
@@ -20,6 +21,10 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
       const extension = file.extension.toLowerCase();
       const value = searchValue.toLowerCase();
 
+      const types = get().types;
+      const typesValues = types.map(type => type.value);
+      if (typesValues.length > 0 && !typesValues.includes(extension)) return false;
+
       if (label.includes(value) || extension.includes(value)) return true;
       return false;
     });
@@ -29,6 +34,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   },
   addFile: (file: TFile) => set(state => ({ files: [...state.files, file] })),
   setLoading: (value: boolean) => set({ loading: value }),
+  setTypes: (types) => set({ types }),
 }));
 
 export default useBaseStore;

@@ -7,7 +7,11 @@ const Files: React.FC = () => {
   const getFiles = useBaseStore(state => state.getFiles);
   const files = useBaseStore(state => state.files);
   const searchValue = useBaseStore(state => state.searchValue);
-  const filteredFiles = useMemo(() => getFiles(), [getFiles, files, searchValue]);
+  const types = useBaseStore(state => state.types);
+  const filteredFiles = useMemo(
+    () => getFiles(),
+    [getFiles, files, searchValue, types]
+  );
 
   return (
     <Box padding="20px" background="white" borderRadius="10px">

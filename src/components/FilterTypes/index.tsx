@@ -1,28 +1,15 @@
 import { TOption } from '@/types/file.types';
 import { getFileTypeOptions } from '@/utils/options';
 import { Box, Text } from '@chakra-ui/react'
-import React, { useState } from 'react'
-import Select, { MultiValue, ActionMeta } from 'react-select';
+import React from 'react'
+import Select from 'react-select';
 import customStyles from './customStyles';
+import useFilter from './useFilter';
 
 const OPTIONS: TOption[] = getFileTypeOptions();
 
 const FilterTypes: React.FC = () => {
-  const [types, setTypes] = useState<MultiValue<TOption>>([]);
-
-  const handleTypesChange = (newValue: MultiValue<TOption>, actionMeta: ActionMeta<TOption>) => {
-    switch (actionMeta.action) {
-      case "remove-value":
-        const { removedValue } = actionMeta;
-        const updatedTags: MultiValue<TOption> = types.filter(tag => tag.value !== removedValue.value);
-        setTypes(updatedTags);
-        break;
-
-      default:
-        const lastNewValue = newValue[newValue.length - 1];
-        setTypes([...types, lastNewValue]);
-    }
-  }
+  const { types, handleTypesChange } = useFilter();
 
   return (
     <Box padding="20px" background="white" borderRadius="10px">
