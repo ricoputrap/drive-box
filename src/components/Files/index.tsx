@@ -8,9 +8,11 @@ const Files: React.FC = () => {
   const files = useBaseStore(state => state.files);
   const searchValue = useBaseStore(state => state.searchValue);
   const types = useBaseStore(state => state.types);
+  const tags = useBaseStore(state => state.tags);
+
   const filteredFiles = useMemo(
     () => getFiles(),
-    [getFiles, files, searchValue, types]
+    [getFiles, files, searchValue, types, tags]
   );
 
   return (
