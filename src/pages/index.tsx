@@ -1,6 +1,7 @@
 import supabase from '@/clients/supabase'
 import BoxLogo from '@/components/BoxLogo'
 import Files from '@/components/Files'
+import FilterTags from '@/components/FilterTags'
 import FilterTypes from '@/components/FilterTypes'
 import Loading from '@/components/Loading'
 import useBaseStore from '@/components/state/store'
@@ -36,6 +37,7 @@ const Home: NextPage<Props> = ({ files }) => {
             <Stack rowGap="20px" width="25%">
               <BoxLogo />
               <FilterTypes />
+              <FilterTags />
             </Stack>
           
             <Stack rowGap="20px" width="-webkit-fill-available">

@@ -6,6 +6,7 @@ export interface BaseState {
   files: TFile[];
   loading: boolean;
   types: MultiValue<TOption>;
+  tags: MultiValue<TOption>;
 }
 
 export interface BaseAction {
@@ -15,4 +16,5 @@ export interface BaseAction {
   addFile: (file: TFile) => void;
   setLoading: (loading: boolean) => void;
   setTypes: (types: MultiValue<TOption>) => void;
+  setTags: (tags: MultiValue<TOption>) => void;
 }

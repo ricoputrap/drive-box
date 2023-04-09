@@ -8,6 +8,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   files: [],
   loading: false,
   types: [],
+  tags: [],
 
   // actions
   setSearchValue: (value: string) => set({ searchValue: value }),
@@ -35,6 +36,7 @@ const useBaseStore = create<BaseState & BaseAction>((set, get) => ({
   addFile: (file: TFile) => set(state => ({ files: [...state.files, file] })),
   setLoading: (value: boolean) => set({ loading: value }),
   setTypes: (types) => set({ types }),
+  setTags: (tags) => set({ tags }),
 }));
 
 export default useBaseStore;
