@@ -91,11 +91,14 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     }
 
     if (data) {
-      const imgUrl = supabaseUrl + '/storage/v1/object/public/drive-box/' + data.path;
+      const url = supabaseUrl + '/storage/v1/object/public/drive-box/' + data.path;
+      const extension = file.type == "image/svg+xml" ? "svg" : file.type.split("/")[1];
+
       const newFile: TFile = {
         label,
-        url: imgUrl,
-        extension: "png",
+        url,
+        extension,
+        size: file.size,
         user_id: "851f138b-901e-4e6a-9186-e2a486e55cdf",
         tags: tags.reduce((acc, tag) => {
           if (acc == "") return tag.value;

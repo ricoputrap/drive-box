@@ -9,6 +9,7 @@ export type TFile = {
   label: string;
   url: string;
   extension: string;
+  size: number;
   user_id: string;
   tags?: string;
 }
