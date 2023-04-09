@@ -1,14 +1,14 @@
 import supabase from '@/clients/supabase'
 import BoxLogo from '@/components/BoxLogo'
 import Files from '@/components/Files'
+import FilterTypes from '@/components/FilterTypes'
 import Loading from '@/components/Loading'
 import useBaseStore from '@/components/state/store'
 import TopMenuContainer from '@/components/TopMenuContainer'
 import { TFile } from '@/types/file.types'
-import { Box, Flex, Stack, Text } from '@chakra-ui/react'
+import { Box, Flex, Stack } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useEffect } from 'react'
 
 interface Props {
@@ -35,6 +35,7 @@ const Home: NextPage<Props> = ({ files }) => {
           <Flex columnGap="20px">
             <Stack rowGap="20px">
               <BoxLogo />
+              <FilterTypes />
             </Stack>
           
             <Stack rowGap="20px">

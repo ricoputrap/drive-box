@@ -6,17 +6,12 @@ import makeAnimated from 'react-select/animated';
 import { useDropzone } from 'react-dropzone';
 import { IoMdCloudUpload } from 'react-icons/io';
 import supabase, { supabaseUrl } from '@/clients/supabase';
-import { TFile } from '@/types/file.types';
+import { Tag, TFile } from '@/types/file.types';
 import useBaseStore from '../state/store';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
-}
-
-interface Tag {
-  value: string;
-  label: string;
 }
 
 const options: Tag[] = [

@@ -1,3 +1,8 @@
+export interface Tag {
+  value: string;
+  label: string;
+}
+
 export type TFile = {
   id?: string;
   created_at?: string;
@@ -6,4 +11,9 @@ export type TFile = {
   extension: string;
   user_id: string;
   tags?: string;
+}
+
+export type TOption = {
+  value: string;
+  label: string;
 }
