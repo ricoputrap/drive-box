@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import useBaseStore from '../state/store'
-import { getBytesFromPercentage, getFormattedLabel, SIZE_5_MB } from './utils';
+import { getBytesFromPercentage, getFormattedLabel, SIZE_10_MB } from './utils';
 
 const useRange = () => {
   const sizeRange = useBaseStore(state => state.sizeRange);
@@ -10,8 +10,8 @@ const useRange = () => {
   const handleChange = (newRange: number[]) => {
     setRange(newRange);
 
-    const minBytes = getBytesFromPercentage(newRange[0], SIZE_5_MB);
-    const maxBytes = getBytesFromPercentage(newRange[1], SIZE_5_MB);
+    const minBytes = getBytesFromPercentage(newRange[0], SIZE_10_MB);
+    const maxBytes = getBytesFromPercentage(newRange[1], SIZE_10_MB);
     setSizeRange([minBytes, maxBytes]);
   }
 
