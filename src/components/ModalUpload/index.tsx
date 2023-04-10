@@ -1,13 +1,12 @@
 import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText, useToast } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react'
-import { createFilter, MultiValue, ActionMeta } from 'react-select';
-import CreateableSelect from "react-select/creatable";
-import makeAnimated from 'react-select/animated';
+import { MultiValue, ActionMeta } from 'react-select';
 import { useDropzone } from 'react-dropzone';
 import { IoMdCloudUpload } from 'react-icons/io';
 import supabase, { supabaseUrl } from '@/clients/supabase';
 import { Tag, TFile } from '@/types/file.types';
 import useBaseStore from '../state/store';
+import InputMultiCreatable from '../reusables/InputMultiCreatable';
 
 interface Props {
   isOpen: boolean;
@@ -28,7 +27,6 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [tags, setTags] = useState<MultiValue<Tag>>([]);
-  const animatedComponents = makeAnimated();
 
   const toast = useToast();
 
@@ -59,7 +57,8 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
         break;
 
       default:
-        setTags([...tags, ...newValue]);
+        const lastNewValue = newValue[newValue.length - 1];
+        setTags([...tags, lastNewValue]);
     }
   }
 
@@ -262,14 +261,11 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
               {/* Tags */}
               <FormControl>
                 <FormLabel>Tags</FormLabel>
-                <CreateableSelect
-                  isMulti
+                <InputMultiCreatable
+                  placeholder="Type and press enter to add a tag"
                   value={tags}
                   options={options}
-                  components={ animatedComponents }
-                  filterOption={createFilter({ ignoreAccents: false })}
-                  onChange={ handleTagsChange }
-                  onCreateOption={ handleCreateOption }
+                  handleChange={ handleTagsChange }
                 />
               </FormControl>
             </VStack>
