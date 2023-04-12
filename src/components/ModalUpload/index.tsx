@@ -1,14 +1,13 @@
 import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText } from '@chakra-ui/react';
-import React, { useMemo, useState } from 'react'
-import { MultiValue, ActionMeta } from 'react-select';
-import { useDropzone } from 'react-dropzone';
+import React from 'react'
 import { IoMdCloudUpload } from 'react-icons/io';
-import supabase, { supabaseUrl } from '@/clients/supabase';
-import { Tag, TFile } from '@/types/file.types';
-import useBaseStore from '../state/store';
+import { Tag } from '@/types/file.types';
 import InputMultiCreatable from '../reusables/InputMultiCreatable';
-import useToastSuccess from '@/hooks/useToastSuccess';
-import useLoading from '@/hooks/useLoading';
+import useFormLabel from './hooks/useFormLabel';
+import useFormTags from './hooks/useFormTags';
+import useFormUpload from './hooks/useFormUpload';
+import useFormFile from './hooks/useFormFile';
+import useFormError from './hooks/useFormError';
 
 interface Props {
   isOpen: boolean;
@@ -22,140 +21,11 @@ const options: Tag[] = [
 ];
 
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
-  const addFile = useBaseStore(state => state.addFile);
-
-  const { showLoading, closeLoading } = useLoading();
-  const { showToastSuccess } = useToastSuccess();
-
-  const [showError, setShowError] = useState<boolean>(false);
-  const [label, setLabel] = useState<string>('');
-  const [file, setFile] = useState<File | null>(null);
-  const [tags, setTags] = useState<MultiValue<Tag>>([]);
-
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (acceptedFiles) => {
-      setFile(acceptedFiles[0]);
-    },
-    accept: {
-      'image/*': ['.jpeg', '.png']
-    }
-  });
-
-  const handleLabelChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setLabel(value);
-  }
-
-  const handleTagsChange = (newValue: MultiValue<Tag>, actionMeta: ActionMeta<Tag>) => {
-    switch (actionMeta.action) {
-      case "clear":
-        setTags([]);
-        break;
-
-      case "remove-value":
-        const { removedValue } = actionMeta;
-        const updatedTags: MultiValue<Tag> = tags.filter(tag => tag.value !== removedValue.value);
-        setTags(updatedTags);
-        break;
-
-      default:
-        const lastNewValue = newValue[newValue.length - 1];
-        setTags([...tags, lastNewValue]);
-    }
-  }
-
-  const reset = () => {
-    setLabel('');
-    setFile(null);
-    setTags([]);
-    setShowError(false);
-  }
-
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    showLoading();
-
-    if (label == "" || file == null) {
-      setShowError(true);
-      closeLoading();
-      return;
-    }
-
-    const { data, error } = await supabase.storage
-      .from('drive-box')
-      .upload(`${label}`, file)
-
-    if (error) {
-      console.error("===== upload error:", error);
-      closeLoading();
-      onClose();
-      reset();
-      return;
-    }
-
-    if (data) {
-      const url = supabaseUrl + '/storage/v1/object/public/drive-box/' + data.path;
-      const extension = file.type == "image/svg+xml" ? "svg" : file.type.split("/")[1];
-
-      const newFile: TFile = {
-        label,
-        url,
-        extension,
-        size: file.size,
-        user_id: "851f138b-901e-4e6a-9186-e2a486e55cdf",
-        tags: tags.reduce((acc, tag) => {
-          if (acc == "") return tag.value;
-          return acc + ";" + tag.value;
-        }, "")
-      }
-
-      const {
-        data: insertFileData,
-        error: insertFileError
-      } = await supabase
-        .from("FILE")
-        .insert([newFile])
-        .select();
-
-      if (insertFileError) {
-        console.error("===== insertFileError:", insertFileError);
-      }
-      else {
-        newFile.id = insertFileData[0].id;
-        showToastSuccess("Upload success.", "The file has been successfully uploaded.");
-
-        addFile(newFile)
-      }
-    }
-
-    closeLoading();
-    onClose();
-    reset();
-  }
-
-  const convertFileSizeToReadable = (size: number) => {
-    if (size < 1024) {
-      return `${size} bytes`;
-    } else if (size < 1024 * 1024) {
-      return `${(size / 1024).toFixed(2)} KB`;
-    } else if (size < 1024 * 1024 * 1024) {
-      return `${(size / 1024 / 1024).toFixed(2)} MB`;
-    } else {
-      return `${(size / 1024 / 1024 / 1024).toFixed(2)} GB`;
-    }
-  }
-
-  const fileSize = useMemo<string>(() => {
-    if (file) {
-      return convertFileSizeToReadable(file.size);
-    }
-    else return "";
-  }, [file]);
-
-  const handleFormCancel = () => {
-    onClose();
-    reset();
-  }
+  const { label, handleLabelChange } = useFormLabel();
+  const { file, fileSize, getRootProps, getInputProps } = useFormFile();
+  const { tags, handleTagsChange } = useFormTags();
+  const { showLabelError, showFileError } = useFormError();
+  const { handleFormCancel, handleSubmit } = useFormUpload(onClose);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -177,7 +47,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                   value={ label }
                   onChange={ handleLabelChange }
                 />
-                { showError && label == "" &&
+                { showLabelError &&
                   <FormHelperText
                     color="red.500"
                     fontSize="12px"
@@ -233,7 +103,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                     )}
                   </Flex>
                 </Box>
-                { showError && file == null &&
+                { showFileError &&
                   <FormHelperText
                     color="red.500"
                     fontSize="12px"
