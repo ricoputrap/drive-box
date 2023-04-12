@@ -8,6 +8,7 @@ import useFormTags from './hooks/useFormTags';
 import useFormUpload from './hooks/useFormUpload';
 import useFormFile from './hooks/useFormFile';
 import useFormError from './hooks/useFormError';
+import FieldError from './components/FieldError';
 
 interface Props {
   isOpen: boolean;
@@ -47,15 +48,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                   value={ label }
                   onChange={ handleLabelChange }
                 />
-                { showLabelError &&
-                  <FormHelperText
-                    color="red.500"
-                    fontSize="12px"
-                    marginTop="4px"
-                  >
-                    Label is required
-                  </FormHelperText>
-                }
+                { showLabelError && <FieldError message="Label is required" /> }
               </FormControl>
 
               {/* File */}
@@ -103,15 +96,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                     )}
                   </Flex>
                 </Box>
-                { showFileError &&
-                  <FormHelperText
-                    color="red.500"
-                    fontSize="12px"
-                    marginTop="4px"
-                  >
-                    File is required
-                  </FormHelperText>
-                }
+                { showFileError && <FieldError message="File is required" /> }
               </FormControl>
 
               {/* Tags */}
