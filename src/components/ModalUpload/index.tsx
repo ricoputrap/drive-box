@@ -1,32 +1,23 @@
-import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText } from '@chakra-ui/react';
+import { Icon, Box, Flex, FormControl, FormLabel, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text } from '@chakra-ui/react';
 import React from 'react'
 import { IoMdCloudUpload } from 'react-icons/io';
-import { Tag } from '@/types/file.types';
-import InputMultiCreatable from '../reusables/InputMultiCreatable';
-import useFormLabel from './hooks/useFormLabel';
-import useFormTags from './hooks/useFormTags';
 import useFormUpload from './hooks/useFormUpload';
 import useFormFile from './hooks/useFormFile';
 import useFormError from './hooks/useFormError';
 import FieldError from './components/FieldError';
+import FieldLabel from './components/FieldLabel';
+import FieldTags from './components/FieldTags';
+import FormActions from './components/FormActions';
 
 interface Props {
   isOpen: boolean;
   onClose: () => void;
 }
 
-const options: Tag[] = [
-  { value: 'tag1', label: 'Tag 1' },
-  { value: 'tag2', label: 'Tag 2' },
-  { value: 'tag3', label: 'Tag 3' },
-];
-
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
-  const { label, handleLabelChange } = useFormLabel();
   const { file, fileSize, getRootProps, getInputProps } = useFormFile();
-  const { tags, handleTagsChange } = useFormTags();
-  const { showLabelError, showFileError } = useFormError();
-  const { handleFormCancel, handleSubmit } = useFormUpload(onClose);
+  const { showFileError } = useFormError();
+  const { handleSubmit } = useFormUpload(onClose);
 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
@@ -39,17 +30,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
           {/* input text for "label" */}
           <form onSubmit={ handleSubmit }>
             <VStack spacing="12px" marginBottom="20px">
-              <FormControl>
-
-                {/* Label */}
-                <FormLabel>Label*</FormLabel>
-                <Input
-                  type="text"
-                  value={ label }
-                  onChange={ handleLabelChange }
-                />
-                { showLabelError && <FieldError message="Label is required" /> }
-              </FormControl>
+              <FieldLabel />
 
               {/* File */}
               <FormControl>
@@ -99,47 +80,10 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
                 { showFileError && <FieldError message="File is required" /> }
               </FormControl>
 
-              {/* Tags */}
-              <FormControl>
-                <FormLabel>Tags</FormLabel>
-                <InputMultiCreatable
-                  placeholder="Type and press enter to add a tag"
-                  value={tags}
-                  options={options}
-                  handleChange={ handleTagsChange }
-                />
-              </FormControl>
+              <FieldTags />
             </VStack>
 
-            {/* Buttons */}
-            <Flex
-              width="100%"
-              justifyContent="center"
-              columnGap="60px"
-              paddingX="66px"
-            >
-              <Button
-                onClick={ handleFormCancel }
-                textTransform="uppercase"
-                background="transparent"
-                color="primaryBlue"
-                borderColor="primaryBlue"
-                borderWidth="1px"
-              >
-                Cancel
-              </Button>
-              <Button
-                type="submit"
-                textTransform="uppercase"
-                background="primaryBlue"
-                color="white"
-                _hover={{
-                  background: "primaryBlueHovered",
-                }}
-              >
-                Submit
-              </Button>
-            </Flex>
+            <FormActions onClose={ onClose } />
           </form>
         </ModalBody>
       </ModalContent>
