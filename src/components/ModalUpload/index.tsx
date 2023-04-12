@@ -8,6 +8,7 @@ import { Tag, TFile } from '@/types/file.types';
 import useBaseStore from '../state/store';
 import InputMultiCreatable from '../reusables/InputMultiCreatable';
 import useToastSuccess from '@/hooks/useToastSuccess';
+import useLoading from '@/hooks/useLoading';
 
 interface Props {
   isOpen: boolean;
@@ -22,8 +23,8 @@ const options: Tag[] = [
 
 const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const addFile = useBaseStore(state => state.addFile);
-  const setLoading = useBaseStore(state => state.setLoading);
 
+  const { showLoading, closeLoading } = useLoading();
   const { showToastSuccess } = useToastSuccess();
 
   const [showError, setShowError] = useState<boolean>(false);
@@ -72,11 +73,11 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
+    showLoading();
 
     if (label == "" || file == null) {
       setShowError(true);
-      setLoading(false);
+      closeLoading();
       return;
     }
 
@@ -86,7 +87,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
 
     if (error) {
       console.error("===== upload error:", error);
-      setLoading(false);
+      closeLoading();
       onClose();
       reset();
       return;
@@ -127,7 +128,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
       }
     }
 
-    setLoading(false);
+    closeLoading();
     onClose();
     reset();
   }

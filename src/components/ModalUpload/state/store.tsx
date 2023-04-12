@@ -13,6 +13,12 @@ const useUploadStore = create<UploadState & UploadAction>((set, get) => ({
   setFile: (file: File) => set({ file }),
   setTags: (tags: MultiValue<TOption>) => set({ tags }),
   setShowError: (showError: boolean) => set({ showError }),
+  reset: () => set({
+    label: "",
+    file: undefined,
+    tags: [],
+    showError: false,
+  })
 }));
 
 export default useUploadStore;

@@ -13,4 +13,5 @@ export interface UploadAction {
   setFile: (file: File) => void;
   setTags: (tags: MultiValue<TOption>) => void;
   setShowError: (showError: boolean) => void;
+  reset: () => void;
 }
