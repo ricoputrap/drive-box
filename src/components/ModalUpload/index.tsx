@@ -1,4 +1,4 @@
-import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText, useToast } from '@chakra-ui/react';
+import { Icon, Box, Button, Flex, FormControl, FormLabel, Input, Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, VStack, Stack, Text, FormHelperText } from '@chakra-ui/react';
 import React, { useMemo, useState } from 'react'
 import { MultiValue, ActionMeta } from 'react-select';
 import { useDropzone } from 'react-dropzone';
@@ -7,6 +7,7 @@ import supabase, { supabaseUrl } from '@/clients/supabase';
 import { Tag, TFile } from '@/types/file.types';
 import useBaseStore from '../state/store';
 import InputMultiCreatable from '../reusables/InputMultiCreatable';
+import useToastSuccess from '@/hooks/useToastSuccess';
 
 interface Props {
   isOpen: boolean;
@@ -23,12 +24,12 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
   const addFile = useBaseStore(state => state.addFile);
   const setLoading = useBaseStore(state => state.setLoading);
 
+  const { showToastSuccess } = useToastSuccess();
+
   const [showError, setShowError] = useState<boolean>(false);
   const [label, setLabel] = useState<string>('');
   const [file, setFile] = useState<File | null>(null);
   const [tags, setTags] = useState<MultiValue<Tag>>([]);
-
-  const toast = useToast();
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop: (acceptedFiles) => {
@@ -120,13 +121,7 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
       }
       else {
         newFile.id = insertFileData[0].id;
-        toast({
-          title: 'Upload success.',
-          description: "The file has been successfully uploaded.",
-          status: 'success',
-          duration: 4000,
-          isClosable: true,
-        })
+        showToastSuccess("Upload success.", "The file has been successfully uploaded.");
 
         addFile(newFile)
       }
@@ -135,16 +130,6 @@ const ModalUpload: React.FC<Props> = ({ isOpen, onClose }) => {
     setLoading(false);
     onClose();
     reset();
-  }
-
-  const handleCreateOption = (inputValue: string) => {
-    // Check if the option already exists
-    if (tags.find((tag) => tag.label === inputValue))
-      return;
-
-    // Create a new option and add it to the list of options
-    const newOption: Tag = { value: inputValue, label: inputValue };
-    setTags([...tags, newOption]);
   }
 
   const convertFileSizeToReadable = (size: number) => {
