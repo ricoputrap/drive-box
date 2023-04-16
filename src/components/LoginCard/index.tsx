@@ -1,8 +1,9 @@
-import { Button, Card, Checkbox, Flex, FormControl, FormLabel, Input, Stack, Text } from '@chakra-ui/react'
+import { Button, Card, Checkbox, Flex, FormControl, FormLabel, Input, InputGroup, InputRightElement, Stack, Text } from '@chakra-ui/react'
 import React from 'react'
 import { useForm, SubmitHandler } from "react-hook-form"
 import * as yup from "yup"
 import { yupResolver } from "@hookform/resolvers/yup"
+import { BiShow, BiHide } from "react-icons/bi"
 
 interface LoginFormInputs {
   email: string;
@@ -15,9 +16,14 @@ const loginFormSchema = yup.object().shape({
 })
 
 const LoginCard: React.FC = () => {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [remember, setRemember] = React.useState(false);
+
   const { register, handleSubmit, formState: { errors } } = useForm<LoginFormInputs>({
     resolver: yupResolver(loginFormSchema)
   });
+
+  const toggleShowPassword = () => setShowPassword(prevShow => !prevShow);
 
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     console.log(data);
@@ -42,17 +48,22 @@ const LoginCard: React.FC = () => {
 
             <FormControl>
               <FormLabel htmlFor='password'>Password</FormLabel>
-              <Input
-                type="password"
-                variant='filled'
-                {...register("password")}
-              />
+              <InputGroup>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  variant='filled'
+                  {...register("password")}
+                />
+                <InputRightElement onClick={toggleShowPassword}>
+                  {showPassword ? <BiHide /> : <BiShow />}
+                </InputRightElement>
+              </InputGroup>
               { errors.password && <p>{ errors.password.message }</p> }
             </FormControl>
           </Stack>
 
           <Flex justifyContent="space-between" alignItems="center" marginTop="12px">
-            <Checkbox>
+            <Checkbox onChange={e => setRemember(e.target.checked)}>
               <Text fontSize="14px">Remember me</Text>
             </Checkbox>
             <Text fontSize="14px">Forgot password?</Text>
