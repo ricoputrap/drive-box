@@ -25,6 +25,7 @@
     "react-dropzone": "^14.2.3",
     "react-icons": "^4.8.0",
     "react-select": "^5.7.2",
+    "react-svg": "^16.1.7",
     "typescript": "5.0.3",
     "zustand": "^4.3.7"
   },
