@@ -1,8 +1,11 @@
 import Logo from '@/components/reusables/Logo'
-import { Box, Flex, Text } from '@chakra-ui/react'
+import { Box, Card, Flex, Text } from '@chakra-ui/react'
 import { NextPage } from 'next'
 import Head from 'next/head'
 import React from 'react'
+import LoginImage from "@/assets/undraw-camera-images.svg"
+import Image from 'next/image'
+import LoginCard from '@/components/LoginCard'
 
 const Login: NextPage = () => {
   return (
@@ -16,7 +19,8 @@ const Login: NextPage = () => {
       <main>
         <Box
           background="primaryBlue"
-          height="100vh"
+          minHeight="100vh"
+          padding="40px"
         >
           <Box position="absolute" left="20px" top="20px">
             <Logo
@@ -24,6 +28,25 @@ const Login: NextPage = () => {
               logoColor="white"
             />
           </Box>
+
+          <Flex
+            justifyContent="space-around"
+            alignItems="center"
+            wrap="wrap"
+            width="100%"
+            minHeight="90vh"
+          >
+            <Box width="426px" display={{
+              base: "none",
+              lg: "block"
+            }}>
+              <Image src={LoginImage} alt="login-image" />
+            </Box>
+
+            <Box width="426px">
+              <LoginCard />
+            </Box>
+          </Flex>
         </Box>
       </main>
     </>
